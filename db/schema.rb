@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110811022207) do
+ActiveRecord::Schema.define(:version => 20110811031235) do
 
   create_table "playlists", :force => true do |t|
     t.string   "name"
@@ -18,5 +18,8 @@ ActiveRecord::Schema.define(:version => 20110811022207) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "playlists", ["name"], :name => "index_playlists_on_name", :unique => true
+  add_index "playlists", ["youtube_id"], :name => "index_playlists_on_youtube_id", :unique => true
 
 end
