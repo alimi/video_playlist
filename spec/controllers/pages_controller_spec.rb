@@ -33,14 +33,14 @@ describe PagesController do
     end
 
     it "should update links when a new playlist is selected" do
-      get :home, :playlist_id => @swtich_playlist.id
+      get :home, :playlist_id => @switch_playlist.id
       assigns(:playlists).each do |playlist|
         playlist.should_not be assigns(:playlist)
       end
     end
 
     it "should have the right title" do
-      response.should have_selector("title", :content => @home_playlist.name)
+      assigns(:title).should be @home_playlist.name
     end
 
     it "should have a link to the about page" do
@@ -62,7 +62,7 @@ describe PagesController do
     end
 
     it "should have the right title" do
-      response.should have_selector("title", :content => "about")
+      assigns(:title).should == "about"
     end
 
     it "should have content" do
