@@ -66,7 +66,7 @@ describe PagesController do
     end
 
     it "should have content" do
-      response.should have_selector("div", :class => "Content")
+      response.should have_selector("section")
     end
 
     it "should have a link to the about page" do

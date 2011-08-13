@@ -1,0 +1,72 @@
+html, body {
+  height: 100%;
+  font-family: arial;
+  font-weight: bold;
+  color: black;
+  overflow: hidden;
+  margin-top: -1px;
+  margin-left: -1px;
+  margin-right: -1px;
+}
+
+.container {
+  background: #000000;
+  height: 100%;
+  overflow: visible;
+  height: 100%;
+}
+
+.page{
+  text-align: right;
+  padding-top: 10px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  height: 26px;
+  width: 833px;
+  background: #A9A9A9;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+header{
+  padding-bottom: 20px;
+}
+
+section{
+  text-align: left;
+  margin-left: auto;
+  margin-right: auto;
+  vertical-align: middle;
+  width: 853px;
+  height: 100%;
+  background: #A9A9A9;
+  overflow: hidden;
+}
+
+.about{
+  padding-left: 2em;
+}
+
+.playlist_links{
+  font-size: 16px;
+  margin-left: 1em;
+  padding-left: 0;
+}
+
+ul{
+  list-style-type: none;
+  margin-left: -2em;
+}
+
+ul li{
+  display: inline;
+}
+
+a{
+  color: #069;
+  text-decoration: none;
+}
+
+a:hover{
+  font-size: 22px;
+}

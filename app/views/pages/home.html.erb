@@ -1,2 +1,23 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<object width="853" height="510">
+  <param name="movie" value="http://www.youtube.com/p/<%= @playlist.youtube_id %>?version=3&autohide=1&hl=en_US&fs=1"></param>
+  <param name="allowFullScreen" value="true"></param>
+  <param name="allowscriptaccess" value="always"></param>
+  <embed src="http://www.youtube.com/p/<%= @playlist.youtube_id %>?version=3&autohide=1&hl=en_US&fs=1" type="application/x-shockwave-flash" 
+   width="853" height="510" allowscriptaccess="always" allowfullscreen="true"></embed>
+</object>
+
+<section class = "playlist_links">
+  <ul>
+    <li>
+      now playing <%= @playlist.name %> | pick a new playlist 
+    </li>
+    <li>
+      <% @playlists.each do |playlist| %>
+        <%# link_to playlist.name, root_path, :playlist_id => playlist.id %>
+        <%= link_to playlist.name, :controller => "pages",
+                                   :action => "home",
+                                   :playlist_id => playlist.id %>
+      <% end %>
+    </li>
+  </ul>
+</section>

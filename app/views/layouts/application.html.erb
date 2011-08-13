@@ -1,14 +1,22 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>VideoPlaylist</title>
-  <%= stylesheet_link_tag :all %>
-  <%= javascript_include_tag :defaults %>
-  <%= csrf_meta_tag %>
-</head>
-<body>
-
-<%= yield %>
-
-</body>
+  <head>
+     <title>video playlist | <%= @title %></title>
+     <%= csrf_meta_tag %> 
+     <%= stylesheet_link_tag 'custom' %>
+     <%= javascript_include_tag :defaults %> 
+  </head>
+  <body>
+    <div class="container">
+      <header class="page">
+        <ul>
+          <li><%= link_to "video playlist", root_path %> | </li>
+          <li><%= link_to "alimi", about_path %> </li>
+        </ul>
+      </header>
+      <section>
+        <%= yield %>
+      </section>
+    </div>
+  </body>
 </html>
