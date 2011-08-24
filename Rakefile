@@ -7,3 +7,8 @@ require 'rake/dsl_definition'
 require 'rake'
 
 VideoPlaylist::Application.load_tasks
+
+desc "Run cron job"
+task :cron => :environment
+  Cron.run
+end
