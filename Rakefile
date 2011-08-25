@@ -10,5 +10,9 @@ VideoPlaylist::Application.load_tasks
 
 desc "Run cron job"
 task :cron => :environment
-  Cron.run
+  playlists = Playlists.all
+
+  playlists.each do |playlist|
+    Cron.run(playlist.name)
+  end
 end
