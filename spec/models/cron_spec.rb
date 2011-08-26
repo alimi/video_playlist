@@ -2,8 +2,16 @@ require 'spec_helper'
 
 describe Cron do
   before(:each) do
-    YtDataApi::YtDataApiClient.stub!(:empty_playlist).and_return(true)
-    YtDataApi::YtDataApiClient.stub!(:add_video_to_playlist).and_return("201")
+    @client = YtDataApi::YtDataApiClient.new(ENV['YT_USER'], ENV['YT_USER_PSWD'], ENV['YT_DEV_AUTH_KEY'])
+
+    @client.create_playlist("test_playlist_one")
+    @client.create_playlist("test_playlist_two")
+
+    @youtube_id_one = @client.get_client_playlist_id("test_playlist_one")
+    @youtube_id_two = @client.get_client_playlist_id("test_playlist_two")
+
+    Playlist.create!(:name => "test_playlist_one", :youtube_id => @youtube_id_one)
+    Playlist.create!(:name => "test_playlist_two", :youtube_id => @youtube_id_two)
 
     @playlists = Playlist.all
   end
@@ -12,25 +20,22 @@ describe Cron do
     Timecop.freeze(2011, 8, 28, 7, 0, 0)
 
     @playlists.each do |playlist|
-      Cron.run(playlist.name)
-
-      YtDataApi::YtDataApiClient.should_receive(:empty_playlist).with(playlist.id)
-      YtDataApi::YtDataApiClient.should_receive(:add_video_to_playlist).with(anything(), playlist.id)
+      lambda{ Cron.run(playlist.name) }.should raise_error
     end
   end
 
-  it "should not update YouTube playlist for video playlist any other time" do
+  it "should not update YouTube playlists for video playlist any other time" do
     Timecop.freeze(2011, 8, 29, 7, 0, 0)
 
     @playlists.each do |playlist|
-      Cron.run(playlist.name)
-
-      YtDataApi::YtDataApiClient.should_not_receive(:empty_playlist).with(playlist.id)
-      YtDataApi::YtDataApiClient.should_not_receive(:add_video_to_playlist).with(anything(), playlist.id)
+      Cron.run(playlist.name).should == nil
     end
   end
 
   after(:each) do
     Timecop.return
+
+    @client.delete_playlist(@youtube_id_one)
+    @client.delete_playlist(@youtube_id_two)
   end
 end
