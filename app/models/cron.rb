@@ -39,6 +39,7 @@ class Cron
         song = item.title[/^[0-9]*: (.*)/, 1]
         song.gsub!(/ /, "+")
         song.gsub!(/,/, "")
+        song.gsub!(/"/, "")
 
         video_id = client.get_video_id(song)
 
