@@ -1,8 +1,9 @@
-# video playlist
+#video playlist
 
-video playlist creates playlists on YouTube based on Billboard top charts.
-Scheduled tasks are run weekly to refresh playlist content.
-Users can access playlist through web app.
+video playlist pulls songs from the Billboard music charts, www.billboard.com, and creates playlists on YouTube.  Scheduled tasks are run weekly to refresh the playlists' content.  Users view the playlists through the web app at http://stormy-flower-289.heroku.com.
 
 #TODO
--Add the code...
+
+- Move tasks to update playlists from cron task to delayed job
+- Update stylesheets to work in older browsers (IE)
+- Update app to display videos in different sizes depending on screen size
