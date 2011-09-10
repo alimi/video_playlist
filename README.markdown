@@ -5,5 +5,6 @@ video playlist pulls songs from the Billboard music charts, www.billboard.com, a
 #TODO
 
 - Move tasks to update playlists from cron task to delayed job
+- Update tests to be less brittle
 - Update stylesheets to work in older browsers (IE)
 - Update app to display videos in different sizes depending on screen size
