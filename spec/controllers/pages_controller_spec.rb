@@ -5,12 +5,30 @@ describe PagesController do
 
   describe "GET 'home'" do
     before(:each) do
-      Playlist.create!(:name => "test", :youtube_id => "2FDD934D493C1893")
-      Playlist.create!(:name => "test_two", :youtube_id => "48BEBC3F884FC594")
-      @switch_playlist = Playlist.create!(:name => "test_three", :youtube_id => "38F91850BDBECF3B")
+      @client = YtDataApi::YtDataApiClient.new(ENV['YT_USER'], ENV['YT_USER_PSWD'], ENV['YT_DEV_AUTH_KEY'])
+
+      @client.create_playlist("test_playlist_one")
+      @client.create_playlist("test_playlist_two")
+      @client.create_playlist("test_playlist_three")
+
+      @youtube_id_one = @client.get_client_playlist_id("test_playlist_one")
+      @youtube_id_two = @client.get_client_playlist_id("test_playlist_two")
+      @youtube_id_three = @client.get_client_playlist_id("test_playlist_three")
+      
+      Playlist.create!(:name => "test_playlist_one", :youtube_id => @youtube_id_one)
+      Playlist.create!(:name => "test_playlist_two", :youtube_id => @youtube_id_two)
+      Playlist.create!(:name => "test_playlist_three", :youtube_id => @youtube_id_three)
+      
       get :home
       @home_playlist = assigns(:playlist)
       @home_playlists = assigns(:playlists)
+      @switch_playlist = Playlist.find_by_name("test_playlist_three")
+    end
+    
+    after(:each) do
+      @client.delete_playlist(@youtube_id_one)
+      @client.delete_playlist(@youtube_id_two)
+      @client.delete_playlist(@youtube_id_three)  
     end
 
     it "should be successful" do

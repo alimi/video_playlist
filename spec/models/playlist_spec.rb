@@ -2,12 +2,25 @@ require 'spec_helper'
 
 describe Playlist do
   before(:each) do
+    @client = YtDataApi::YtDataApiClient.new(ENV['YT_USER'], ENV['YT_USER_PSWD'], ENV['YT_DEV_AUTH_KEY'])
+    
+    @client.create_playlist("test_playlist_one")
+    @client.create_playlist("test_playlist_two")
+    
+    @youtube_id_one = @client.get_client_playlist_id("test_playlist_one")
+    @youtube_id_two = @client.get_client_playlist_id("test_playlist_two")
+    
     @attr = {
-      :name => "test",
-      :youtube_id => "2FDD934D493C1893"
+      :name => "test_playlist_one",
+      :youtube_id => @youtube_id_one
     }
   end
 
+  after(:each) do
+    @client.delete_playlist(@youtube_id_one)
+    @client.delete_playlist(@youtube_id_two)  
+  end
+  
   it "should create a new instance given valid attributes" do
     Playlist.create!(@attr)
   end
@@ -19,7 +32,7 @@ describe Playlist do
 
   it "should have a unique name" do
     Playlist.create!(@attr)
-    duplicate_name = Playlist.new(@attr.merge(:youtube_id => "48BEBC3F884FC594"))
+    duplicate_name = Playlist.new(@attr.merge(:youtube_id => @youtube_id_two))
     duplicate_name.should_not be_valid
   end
 
@@ -35,7 +48,7 @@ describe Playlist do
 
   it "should have a unique youtube id" do
     Playlist.create!(@attr)
-    duplicate_id = Playlist.new(@attr.merge(:name => "test_two"))
+    duplicate_id = Playlist.new(@attr.merge(:name => "test_playlist_two"))
     duplicate_id.should_not be_valid
   end  
 end

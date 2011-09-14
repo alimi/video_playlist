@@ -4,12 +4,27 @@ describe "HomeNavs" do
 
   describe "GET 'home'" do
     before(:each) do
-      Playlist.create!(:name => "test", :youtube_id => "2FDD934D493C1893")
-      @switch_playlist = Playlist.create!(:name => "test_two", :youtube_id => "48BEBC3F884FC594")
+      @client = YtDataApi::YtDataApiClient.new(ENV['YT_USER'], ENV['YT_USER_PSWD'], ENV['YT_DEV_AUTH_KEY'])
+
+      @client.create_playlist("test_playlist_one")
+      @client.create_playlist("test_playlist_two")
+      
+      @youtube_id_one = @client.get_client_playlist_id("test_playlist_one")
+      @youtube_id_two = @client.get_client_playlist_id("test_playlist_two")
+      
+      Playlist.create!(:name => "test_playlist_one", :youtube_id => @youtube_id_one)
+      Playlist.create!(:name => "test_playlist_two", :youtube_id => @youtube_id_two)
+      
       visit root_path
       @home_playlist = assigns(:playlist)
+      @switch_playlist = Playlist.find_by_name("test_playlist_two")
     end
 
+    after(:each) do
+      @client.delete_playlist(@youtube_id_one)
+      @client.delete_playlist(@youtube_id_two)  
+    end
+    
     it "should load a new playlist when playlist link is clicked" do
       click_link @switch_playlist.name
       assigns(:playlist).id.should be @switch_playlist.id

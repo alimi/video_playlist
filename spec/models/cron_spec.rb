@@ -15,6 +15,13 @@ describe Cron do
 
     @playlists = Playlist.all
   end
+  
+  after(:each) do
+    Timecop.return
+
+    @client.delete_playlist(@youtube_id_one)
+    @client.delete_playlist(@youtube_id_two)
+  end
 
   it "should update YouTube playlists for video playlist every Sunday at 7:00 AM" do
     Timecop.freeze(2011, 8, 28, 7, 0, 0)
@@ -30,12 +37,5 @@ describe Cron do
     @playlists.each do |playlist|
       Cron.run(playlist.name).should == nil
     end
-  end
-
-  after(:each) do
-    Timecop.return
-
-    @client.delete_playlist(@youtube_id_one)
-    @client.delete_playlist(@youtube_id_two)
   end
 end
