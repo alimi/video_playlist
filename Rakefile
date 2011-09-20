@@ -9,10 +9,6 @@ require 'rake'
 VideoPlaylist::Application.load_tasks
 
 desc "Run cron job"
-task :cron => :environment
-  playlists = Playlists.all
-
-  playlists.each do |playlist|
-    Cron.run(playlist.name)
-  end
+task :cron => :environment do
+  Cron.run
 end

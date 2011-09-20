@@ -18,24 +18,21 @@ describe Cron do
   
   after(:each) do
     Timecop.return
-
     @client.delete_playlist(@youtube_id_one)
     @client.delete_playlist(@youtube_id_two)
   end
 
-  it "should update YouTube playlists for video playlist every Sunday at 7:00 AM" do
+  it "should schedule YtUpdatePlaylistJob to update all playlists every Sunday at 7:00 AM" do
     Timecop.freeze(2011, 8, 28, 7, 0, 0)
-
-    @playlists.each do |playlist|
-      lambda{ Cron.run(playlist.name) }.should raise_error
-    end
+    Cron.run
+    jobs = Delayed::Job.all
+    jobs.size.should be > 0
   end
 
-  it "should not update YouTube playlists for video playlist any other time" do
-    Timecop.freeze(2011, 8, 29, 7, 0, 0)
-
-    @playlists.each do |playlist|
-      Cron.run(playlist.name).should == nil
-    end
+  it "should not schedule YtUpdatePlaylistJob any other time" do
+    Timecop.freeze(2011, 8, 28, 8, 0, 0)
+    Cron.run
+    jobs = Delayed::Job.all
+    jobs.size.should == 0
   end
 end

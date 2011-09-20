@@ -30,6 +30,10 @@ GEM
     activesupport (3.0.9)
     arel (2.0.10)
     builder (2.1.2)
+    daemons (1.1.4)
+    delayed_job (2.1.4)
+      activesupport (~> 3.0)
+      daemons
     diff-lcs (1.1.2)
     erubis (2.6.6)
       abstract (>= 1.0.0)
@@ -96,6 +100,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  delayed_job (= 2.1.4)
   rails (= 3.0.9)
   rspec (= 2.5.0)
   rspec-rails (= 2.5.0)
