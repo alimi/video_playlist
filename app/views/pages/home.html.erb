@@ -8,9 +8,9 @@
 
 <section class = "playlist_links">
   <ul>
-    <li class="filler">|</li>
+	<li class="filler">
     <li>
-      now playing <%= @playlist.name %> | pick a new playlist 
+      play <span class="playing"><%= @playlist.name %></span> or play
     </li>
     <li>
       <% @playlists.each do |playlist| %>
