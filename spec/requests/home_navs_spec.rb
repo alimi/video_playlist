@@ -36,7 +36,7 @@ describe "HomeNavs" do
     end
 
     it "should load the home page when the home link is clicked" do
-      click_link "video playlist"
+      click_link "stormyflower"
       assigns(:playlist).id.should be @home_playlist.id
     end
   end

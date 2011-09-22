@@ -66,7 +66,7 @@ describe PagesController do
     end
  
     it "should have a link to the home page" do
-      response.should have_selector("a", :href => "/", :content => "video playlist")
+      response.should have_selector("a", :href => "/", :content => "stormyflower")
     end
   end
 
@@ -92,7 +92,7 @@ describe PagesController do
     end
  
     it "should have a link to the home page" do
-      response.should have_selector("a", :href => "/", :content => "video playlist")
+      response.should have_selector("a", :href => "/", :content => "stormyflower")
     end
   end
 
