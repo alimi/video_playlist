@@ -1,55 +1,43 @@
-html, body {
-  height: 100%;
-  font-family: arial;
-  font-weight: bold;
-  color: black;
-  overflow: hidden;
-  margin-top: -1px;
-  margin-left: -1px;
-  margin-right: -1px;
-}
-
 .container {
   background: #000000;
-  height: 100%;
-  overflow: visible;
-  height: 100%;
-}
-
-.page{
-  text-align: right;
-  padding-top: .25em;
-  padding-right: 20px;
-  padding-bottom: 20px;
-  height: 26px;
-  width: 833px;
-  background: #A9A9A9;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-header{
-  padding-bottom: 20px;
-}
-
-section{
-  text-align: left;
-  margin-left: auto;
-  margin-right: auto;
-  vertical-align: middle;
   width: 853px;
   height: 100%;
   background: #A9A9A9;
-  overflow: hidden;
+}
+
+html, body {
+  background: #000000;
+  height: 100%;
+  font-weight: bold;
+}
+
+.site_header {
+  position: relative;
+  text-align: right;
+  font-size: 14px;
+  height: 3em;
+}
+
+.playlist_links {
+  font-size: 16px;
+  padding-left: 1em;
+}
+
+.playing {
+  color: #006633;
+}
+
+.page_header {
+	font-size: 20px;
+	padding-bottom: 1em;
+}
+
+.page_content {
+  font-size: 14px;
 }
 
 .about{
   padding-left: 2em;
-}
-
-.playlist_links{
-  font-size: 16px;
-  padding-left: 0;
 }
 
 .filler{
@@ -57,6 +45,7 @@ section{
   color: #A9A9A9;
 }
 
+/* lists */
 ul{
   list-style-type: none;
   margin-left: -2em;
@@ -66,11 +55,13 @@ ul li{
   display: inline;
 }
 
+/* links */
 a{
   color: #069;
   text-decoration: none;
 }
 
 a:hover{
+  color: #069;
   font-size: 22px;
 }
