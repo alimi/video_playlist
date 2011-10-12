@@ -1,7 +1,7 @@
 class Cron
   def self.run
-    now = Time.now
-    if(now.sunday? && now.hour == 7)
+    now = Time.now.utc
+    if(now.friday? && now.hour == 11)
       playlists = Playlist.all
          
       playlists.each do |playlist|

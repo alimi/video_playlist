@@ -22,15 +22,17 @@ describe Cron do
     @client.delete_playlist(@youtube_id_two)
   end
 
-  it "should schedule YtUpdatePlaylistJob to update all playlists every Sunday at 7:00 AM" do
-    Timecop.freeze(2011, 8, 28, 7, 0, 0)
+  it "should schedule YtUpdatePlaylistJob to update all playlists every Friday at 11:00 UTC" do
+    time = Time.utc(2011, 10, 14, 11)
+    Timecop.freeze(time)
     Cron.run
     jobs = Delayed::Job.all
     jobs.size.should be > 0
   end
 
   it "should not schedule YtUpdatePlaylistJob any other time" do
-    Timecop.freeze(2011, 8, 28, 8, 0, 0)
+    time = Time.utc(2011, 10, 14, 12)
+    Timecop.freeze(time)
     Cron.run
     jobs = Delayed::Job.all
     jobs.size.should == 0
