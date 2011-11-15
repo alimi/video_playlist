@@ -7,13 +7,9 @@ describe PagesController do
     before(:each) do
       @client = YtDataApi::YtDataApiClient.new(ENV['YT_USER'], ENV['YT_USER_PSWD'], ENV['YT_DEV_AUTH_KEY'])
 
-      @client.create_playlist("test_playlist_one")
-      @client.create_playlist("test_playlist_two")
-      @client.create_playlist("test_playlist_three")
-
-      @youtube_id_one = @client.get_client_playlist_id("test_playlist_one")
-      @youtube_id_two = @client.get_client_playlist_id("test_playlist_two")
-      @youtube_id_three = @client.get_client_playlist_id("test_playlist_three")
+      response_one, @youtube_id_one = @client.create_playlist("test_playlist_one")
+      response_two, @youtube_id_two = @client.create_playlist("test_playlist_two")
+      response_three, @youtube_id_three = @client.create_playlist("test_playlist_three")
       
       Playlist.create!(:name => "test_playlist_one", :youtube_id => @youtube_id_one)
       Playlist.create!(:name => "test_playlist_two", :youtube_id => @youtube_id_two)
