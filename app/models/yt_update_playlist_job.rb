@@ -23,16 +23,14 @@ class YtUpdatePlaylistJob < Struct.new(:playlist_name)
     
     if(rss_query_result)
       client = YtDataApi::YtDataApiClient.new(ENV['YT_USER'], ENV['YT_USER_PSWD'], ENV['YT_DEV_AUTH_KEY'])
-      playlist_id = client.get_client_playlist_id(playlist_name)
+      playlist_id = client.get_playlist_id(playlist_name)
 
       if(playlist_id.nil?)
-        client.create_playlist(playlist_name)
-        playlist_id = client.get_client_playlist_id(playlist_name)
+        response, playlist_id = client.create_playlist(playlist_name)
       else
         #empty = client.empty_playlist(playlist_id)
         client.delete_playlist(playlist_id)
-        client.create_playlist(playlist_name)
-        playlist_id = client.get_client_playlist_id(playlist_name)
+        response, playlist_id = client.create_playlist(playlist_name)
       end
 
       rss_query_result.items.each do |item|
@@ -41,7 +39,7 @@ class YtUpdatePlaylistJob < Struct.new(:playlist_name)
         song.gsub!(/,/, "")
         song.gsub!(/"/, "")
 
-        video_id = client.get_video_id(song)
+        video_id = client.get_video_ids(song)
 
         if(video_id.nil?)
           puts "Unable to find video id for #{song}"

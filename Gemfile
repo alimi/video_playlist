@@ -6,7 +6,7 @@ gem 'rails', '3.0.9'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3', :require => 'sqlite3'
-gem 'yt_data_api', '0.0.1'
+gem 'yt_data_api', '0.0.2'
 gem 'delayed_job', '2.1.4'
 gem 'hirefire', '0.1.4'
 
