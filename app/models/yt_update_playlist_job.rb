@@ -38,15 +38,42 @@ class YtUpdatePlaylistJob < Struct.new(:playlist_name)
         song.gsub!(/ /, "+")
         song.gsub!(/,/, "")
         song.gsub!(/"/, "")
+        
+        video_id = nil
+        count = 1
 
-        video_id = client.get_video_ids(song)
-
+        begin
+          video_id = client.get_video_ids(song)
+        rescue OpenURI::HTTPError
+          if(count < 5)
+            puts "Wait #{30 * count}..."
+            sleep(30 * count)
+            count += 1
+            retry
+          else
+            puts $!
+          end
+        end
+          
         if(video_id.nil?)
           puts "Unable to find video id for #{song}"
           puts "Unable to add #{song} to #{playlist_name}"
         else
-          client.add_video_to_playlist(video_id, playlist_id)
-          puts "Added #{song} (#{video_id}) to #{playlist_name} (#{playlist_id})"
+          count = 1
+          
+          begin
+            client.add_video_to_playlist(video_id, playlist_id)
+            puts "Added #{song} (#{video_id}) to #{playlist_name} (#{playlist_id})"
+          rescue OpenURI::HTTPError
+            if(count < 5)
+              puts "Wait #{30 * count}..."
+              sleep(30 * count)
+              count += 1
+              retry
+            else
+              puts $!
+            end
+          end
         end
       end
     else
