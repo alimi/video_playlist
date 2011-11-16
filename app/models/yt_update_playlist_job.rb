@@ -22,15 +22,17 @@ class YtUpdatePlaylistJob < Struct.new(:playlist_name)
     end
     
     if(rss_query_result)
-      client = YtDataApi::YtDataApiClient.new(ENV['YT_USER'], ENV['YT_USER_PSWD'], ENV['YT_DEV_AUTH_KEY'])
-      playlist_id = client.get_playlist_id(playlist_name)
+      client = yt_data_api_call{
+        YtDataApi::YtDataApiClient.new(ENV['YT_USER'], ENV['YT_USER_PSWD'], ENV['YT_DEV_AUTH_KEY'])
+      }
+      
+      playlist_id = yt_data_api_call{ client.get_playlist_id(playlist_name) }
 
       if(playlist_id.nil?)
-        response, playlist_id = client.create_playlist(playlist_name)
+        response, playlist_id = yt_data_api_call{ client.create_playlist(playlist_name) }
       else
-        #empty = client.empty_playlist(playlist_id)
-        client.delete_playlist(playlist_id)
-        response, playlist_id = client.create_playlist(playlist_name)
+        yt_data_api_call{ client.delete_playlist(playlist_id) }
+        response, playlist_id = yt_data_api_call{ client.create_playlist(playlist_name) }
       end
 
       rss_query_result.items.each do |item|
@@ -39,41 +41,14 @@ class YtUpdatePlaylistJob < Struct.new(:playlist_name)
         song.gsub!(/,/, "")
         song.gsub!(/"/, "")
         
-        video_id = nil
-        count = 1
-
-        begin
-          video_id = client.get_video_ids(song)
-        rescue OpenURI::HTTPError
-          if(count < 5)
-            puts "Wait #{30 * count}..."
-            sleep(30 * count)
-            count += 1
-            retry
-          else
-            puts $!
-          end
-        end
+        video_id = yt_data_api_call{ client.get_video_ids(song) }
           
         if(video_id.nil?)
           puts "Unable to find video id for #{song}"
           puts "Unable to add #{song} to #{playlist_name}"
         else
-          count = 1
-          
-          begin
-            client.add_video_to_playlist(video_id, playlist_id)
-            puts "Added #{song} (#{video_id}) to #{playlist_name} (#{playlist_id})"
-          rescue OpenURI::HTTPError
-            if(count < 5)
-              puts "Wait #{30 * count}..."
-              sleep(30 * count)
-              count += 1
-              retry
-            else
-              puts $!
-            end
-          end
+          yt_data_api_call{ client.add_video_to_playlist(video_id, playlist_id) }
+          puts "Added #{song} (#{video_id}) to #{playlist_name} (#{playlist_id})"
         end
       end
     else
@@ -92,5 +67,20 @@ class YtUpdatePlaylistJob < Struct.new(:playlist_name)
       end
 
       RSS::Parser.parse(rss_content, false)
+    end
+    
+    def yt_data_api_call(&block)
+      count = 1
+      
+      begin
+        block.call
+      rescue OpenURI::HTTPError
+        if(count < 5)
+          puts "Wait #{30 * count}..."
+          sleep(30 * count)
+          count += 1
+          retry
+        end 
+      end
     end
 end
