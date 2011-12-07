@@ -73,7 +73,11 @@ class YtUpdatePlaylistJob < Struct.new(:playlist_name)
       count = 1
       
       begin
-        block.call
+        response = block.call
+        if(response.respond_to?('code') && response.code == "403")
+          raise OpenURI::HTTPError.new(nil, nil) 
+        end
+        response
       rescue OpenURI::HTTPError
         if(count < 5)
           puts "Wait #{30 * count}..."
